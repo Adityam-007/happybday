@@ -2,7 +2,7 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>HBD love</title>	    
+    <title>HBD Mom</title>	    
     <link type="text/css" rel="stylesheet" href="./file/default.css">
     <script type="text/javascript" src="./file/jquery.min.js"></script>
     <script type="text/javascript" src="./file/jscex.min.js"></script>
@@ -13,34 +13,64 @@
     <script type="text/javascript" src="./file/jscex-async-powerpack.min.js"></script>
     <script type="text/javascript" src="./file/functions.js" charset="utf-8"></script>
     <script type="text/javascript" src="./file/love.js" charset="utf-8"></script>
+    
+    <style>
+        /* NEW STYLES FOR IMPROVED TEXT ANIMATION */
+        #code {
+            display: none;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 2.2;
+        }
+        
+        .say {
+            display: block;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1.2s ease-out;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .say.reveal {
+            opacity: 1;
+            transform: translateY(0);
+            text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+        }
+
+        #clock-box {
+            color: #f64c72;
+            font-weight: bold;
+        }
+    </style>
+
     <script>
         function playAudio() {
             var audio = document.getElementById("myAudio");
-            audio.play();
+            if(audio) audio.play();
         }
     </script>
 </head>
 <body>
     <div id="main">
-        <div id="error"><a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a> (<a href="http://firefox.com.cn/download/">Firefox</a>)</div>
-        <audio autoplay="autoplay" height="100" width="100" id="myAudio">
+        <div id="error">Please use <a href="http://www.google.cn/chrome/">Chrome</a> or <a href="http://firefox.com.cn/">Firefox</a></div>
+        <audio autoplay="autoplay" id="myAudio">
             <source src="aud.mp3" type="audio/mp3" />
-            <embed height="100" width="100" src="aud.mp3" />
         </audio>
         <div id="wrap">
             <div id="text">
                 <div id="code">
-                    <span class="say">To the💞</span><br>
-                    <span class="say">Best Woman 🎈</span><br>
-                    <span class="say">and the Best mother🍀</span><br>
-                    <span class="say">Wishing you 34th</span><br>
-                    <span class="say">Happy Birthday💕</span><br>
-                    <span class="say"> </span><br>
-                    <span class="say">I am lucky to have to have parents like you</span><br>
+                    <span class="say">To the 💞</span>
+                    <span class="say">Best Woman 🎈</span>
+                    <span class="say">and the Best mother 🍀</span>
+                    <span class="say">Wishing you 34th</span>
+                    <span class="say">Happy Birthday 💕</span>
+                    <span class="say"> </span>
+                    <span class="say">I am lucky to have parents like you</span>
                 </div>
             </div>
             <div id="clock-box">
-                <span id="clock">577 days 0 hours 0 minutes 0 seconds</span> <!-- Change to "6940 days..." if needed -->
+                <span id="clock"></span>
             </div>
             <canvas id="canvas" width="1100" height="680"></canvas>
         </div>
@@ -49,7 +79,6 @@
     <script>
     (function() {
         var canvas = $('#canvas');
-		
         if (!canvas[0].getContext) {
             $("#error").show();
             return false;
@@ -61,11 +90,7 @@
         canvas.attr("height", height);
 
         var opts = {
-            seed: {
-                x: width / 2 - 20,
-                color: "rgb(190, 26, 37)",
-                scale: 2
-            },
+            seed: { x: width / 2 - 20, color: "rgb(190, 26, 37)", scale: 2 },
             branch: [
                 [535, 680, 570, 250, 500, 200, 30, 100, [
                     [540, 500, 455, 417, 340, 400, 13, 100, [
@@ -84,16 +109,8 @@
                     ]]
                 ]] 
             ],
-            bloom: {
-                num: 700,
-                width: 1080,
-                height: 650,
-            },
-            footer: {
-                width: 1200,
-                height: 5,
-                speed: 10,
-            }
+            bloom: { num: 700, width: 1080, height: 650 },
+            footer: { width: 1200, height: 5, speed: 10 }
         }
 
         var tree = new Tree(canvas[0], width, height, opts);
@@ -121,53 +138,40 @@
 
         var seedAnimate = eval(Jscex.compile("async", function () {
             seed.draw();
-            while (hold) {
-                $await(Jscex.Async.sleep(10));
-            }
-            while (seed.canScale()) {
-                seed.scale(0.95);
-                $await(Jscex.Async.sleep(10));
-            }
-            while (seed.canMove()) {
-                seed.move(0, 2);
-                foot.draw();
-                $await(Jscex.Async.sleep(10));
-            }
+            while (hold) { $await(Jscex.Async.sleep(10)); }
+            while (seed.canScale()) { seed.scale(0.95); $await(Jscex.Async.sleep(10)); }
+            while (seed.canMove()) { seed.move(0, 2); foot.draw(); $await(Jscex.Async.sleep(10)); }
         }));
 
         var growAnimate = eval(Jscex.compile("async", function () {
-            do {
-                tree.grow();
-                $await(Jscex.Async.sleep(10));
-            } while (tree.canGrow());
+            do { tree.grow(); $await(Jscex.Async.sleep(10)); } while (tree.canGrow());
         }));
 
         var flowAnimate = eval(Jscex.compile("async", function () {
-            do {
-                tree.flower(2);
-                $await(Jscex.Async.sleep(10));
-            } while (tree.canFlower());
+            do { tree.flower(2); $await(Jscex.Async.sleep(10)); } while (tree.canFlower());
         }));
 
         var moveAnimate = eval(Jscex.compile("async", function () {
             tree.snapshot("p1", 240, 0, 610, 680);
-            while (tree.move("p1", 500, 0)) {
-                foot.draw();
-                $await(Jscex.Async.sleep(10));
-            }
+            while (tree.move("p1", 500, 0)) { foot.draw(); $await(Jscex.Async.sleep(10)); }
             foot.draw();
             tree.snapshot("p2", 500, 0, 610, 680);
-
             canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
             canvas.css("background", "#ffe");
             $await(Jscex.Async.sleep(300));
             canvas.css("background", "none");
         }));
 
+        // IMPROVED TEXT ANIMATION LOGIC
         var textAnimate = eval(Jscex.compile("async", function () {
-            $("#code").show().typewriter();
+            $("#code").show();
+            var spans = $(".say");
+            for (var i = 0; i < spans.length; i++) {
+                $(spans[i]).addClass("reveal");
+                $await(Jscex.Async.sleep(800)); // Delay between each line
+            }
         }));
-	    
+
         var runAsync = eval(Jscex.compile("async", function () {
             $await(seedAnimate());
             $await(growAnimate());
