@@ -4,6 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>HBD Mom</title>	    
     <link type="text/css" rel="stylesheet" href="./file/default.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
     <script type="text/javascript" src="./file/jquery.min.js"></script>
     <script type="text/javascript" src="./file/jscex.min.js"></script>
     <script type="text/javascript" src="./file/jscex-parser.js"></script>
@@ -15,32 +17,52 @@
     <script type="text/javascript" src="./file/love.js" charset="utf-8"></script>
     
     <style>
-        /* NEW STYLES FOR IMPROVED TEXT ANIMATION */
+        /* VISUALLY APPEALING TEXT STYLING */
         #code {
             display: none;
-            font-family: 'Microsoft YaHei', sans-serif;
-            color: #333;
-            line-height: 2.2;
+            font-family: 'Poppins', sans-serif;
+            color: #444;
+            line-height: 1.8;
+            padding-left: 20px;
         }
         
         .say {
             display: block;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 1.2s ease-out;
-            font-size: 18px;
-            font-weight: 500;
+            transform: translateX(-20px);
+            transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Making text significantly bigger */
+            font-size: 28px; 
+            margin-bottom: 10px;
+        }
+
+        /* Special styling for the main birthday wish */
+        .highlight {
+            font-family: 'Dancing Script', cursive;
+            font-size: 45px;
+            background: linear-gradient(45deg, #ff4d6d, #f64c72);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
         }
 
         .say.reveal {
             opacity: 1;
-            transform: translateY(0);
-            text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+            transform: translateX(0);
         }
 
         #clock-box {
-            color: #f64c72;
-            font-weight: bold;
+            font-size: 20px;
+            color: #ff4d6d;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 20px;
+        }
+
+        #clock {
+            font-weight: 600;
+            background: rgba(255, 77, 109, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
         }
     </style>
 
@@ -63,10 +85,11 @@
                     <span class="say">To the 💞</span>
                     <span class="say">Best Woman 🎈</span>
                     <span class="say">and the Best mother 🍀</span>
-                    <span class="say">Wishing you 34th</span>
-                    <span class="say">Happy Birthday 💕</span>
-                    <span class="say"> </span>
-                    <span class="say">I am lucky to have parents like you</span>
+                    <span class="say highlight">Wishing you 34th</span>
+                    <span class="say highlight">Happy Birthday 💕</span>
+                    <span class="say" style="font-size: 22px; margin-top: 20px; font-style: italic; color: #777;">
+                        I am lucky to have parents like you
+                    </span>
                 </div>
             </div>
             <div id="clock-box">
@@ -162,13 +185,13 @@
             canvas.css("background", "none");
         }));
 
-        // IMPROVED TEXT ANIMATION LOGIC
+        // Sequential Reveal Animation
         var textAnimate = eval(Jscex.compile("async", function () {
             $("#code").show();
             var spans = $(".say");
             for (var i = 0; i < spans.length; i++) {
                 $(spans[i]).addClass("reveal");
-                $await(Jscex.Async.sleep(800)); // Delay between each line
+                $await(Jscex.Async.sleep(1000)); // 1 second gap between lines
             }
         }));
 
