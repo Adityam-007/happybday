@@ -1,189 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Happy Birthday Mom ❤️</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    overflow: hidden;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Mom | The Story</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root { --accent: #ff4d6d; --dark: #1a1a1a; --gold: #d4af37; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Poppins', sans-serif; background: #000; color: white; }
+        
+        .page {
+            position: absolute; width: 100vw; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: all 1s ease-in-out;
+        }
+        .active { opacity: 1; visibility: visible; }
 
-  .page {
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.8s ease, opacity 0.8s;
-  }
+        /* --- PAGE 1: THE HERO --- */
+        #page1 { background: radial-gradient(circle, #2c0b0e 0%, #000 100%); }
+        .hero-img-box {
+            width: 280px; height: 380px; border-radius: 140px 140px 20px 20px;
+            border: 2px solid var(--gold); padding: 10px; overflow: hidden;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 130px 130px 10px 10px; }
+        .hero-text h1 { font-family: 'Playfair Display'; font-size: 4.5rem; margin: 20px 0 0; }
+        .hero-text span { color: var(--accent); font-style: italic; display: block; font-size: 2rem; }
 
-  .hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(100%);
-  }
+        /* --- PAGE 2: THE HEART TREE --- */
+        #page2 { background: #050505; }
+        #treeCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .tree-msg { z-index: 10; text-align: center; pointer-events: none; }
+        .tree-msg h2 { font-size: 3rem; font-family: 'Dancing Script'; color: var(--accent); text-shadow: 0 0 15px var(--accent); }
 
-  /* COLOR PALETTE */
-  .page1 { background: linear-gradient(135deg, #ff758c, #ffb199); }
-  .page2 { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
-  .page3 { background: linear-gradient(135deg, #fddb92, #d1fdff); }
+        /* --- PAGE 3: THE ENVELOPE --- */
+        #page3 { background: #fff5f6; color: #333; }
+        .env-wrapper { position: relative; width: 350px; height: 250px; cursor: pointer; perspective: 1000px; }
+        .env-base { position: absolute; width: 100%; height: 100%; background: #d44d5c; border-radius: 0 0 10px 10px; z-index: 2; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .env-flap {
+            position: absolute; top: 0; width: 0; height: 0;
+            border-left: 175px solid transparent; border-right: 175px solid transparent;
+            border-top: 135px solid #b83b48; transform-origin: top;
+            transition: 0.6s ease; z-index: 4;
+        }
+        .letter {
+            position: absolute; bottom: 5px; left: 15px; width: 320px; height: 220px;
+            background: #fff; padding: 30px; box-sizing: border-box; text-align: center;
+            transition: 0.8s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 3;
+        }
+        .letter h3 { font-family: 'Dancing Script'; font-size: 2.2rem; color: var(--accent); margin: 0; }
+        .letter p { font-size: 22px; font-weight: 600; color: #555; margin-top: 20px; opacity: 0; transition: 0.5s 0.8s; }
 
-  h1 {
-    color: white;
-    font-size: 3em;
-    text-align: center;
+        /* Interactions */
+        .env-wrapper:hover .env-flap { transform: rotateX(180deg); z-index: 1; }
+        .env-wrapper:hover .letter { transform: translateY(-170px); }
+        .env-wrapper:hover .letter p { opacity: 1; }
 
-    /* Decorative touch */
-    letter-spacing: 2px;
-    text-shadow: 0 0 10px rgba(255,255,255,0.7),
-                 0 0 20px rgba(255,255,255,0.4);
-
-    /* Animation */
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeSlide 1s ease forwards;
-  }
-
-  @keyframes fadeSlide {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  button {
-    margin-top: 20px;
-    padding: 12px 25px;
-    font-size: 18px;
-    border: none;
-    border-radius: 25px;
-    background: white;
-    color: #ff4d6d;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  button:hover {
-    transform: scale(1.1);
-  }
-
-  /* GIFT BOX */
-  .gift-box {
-    width: 220px;
-    height: 220px;
-    background: linear-gradient(145deg, #ff4d6d, #ff758f);
-    border-radius: 15px;
-    position: relative;
-    cursor: pointer;
-    animation: float 2s infinite ease-in-out;
-  }
-
-  .gift-box::before {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 100%;
-    background: gold;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .gift-box::after {
-    content: '';
-    position: absolute;
-    height: 30px;
-    width: 100%;
-    background: gold;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .lid {
-    position: absolute;
-    width: 240px;
-    height: 60px;
-    background: #ff758f;
-    top: -60px;
-    left: -10px;
-    border-radius: 10px;
-    transition: 0.6s;
-  }
-
-  .open .lid {
-    transform: rotate(-35deg) translateY(-20px);
-  }
-
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-  }
-
-  /* HEARTS */
-  .heart {
-    position: absolute;
-    color: red;
-    font-size: 20px;
-    animation: floatUp 4s linear infinite;
-  }
-
-  @keyframes floatUp {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-100vh); opacity: 0; }
-  }
-
-</style>
+        .btn {
+            margin-top: 40px; padding: 12px 40px; background: transparent;
+            border: 1px solid var(--accent); color: white; border-radius: 50px;
+            cursor: pointer; letter-spacing: 2px; font-size: 0.7rem; transition: 0.3s; z-index: 100;
+        }
+        .btn:hover { background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+    </style>
 </head>
 <body>
 
-<!-- PAGE 1 -->
-<div class="page page1" id="page1">
-  <h1>🎉 Happy Birthday Mom 🎂</h1>
-  <button onclick="nextPage(1)">Start Surprise 💖</button>
-</div>
+    <div class="page active" id="page1">
+        <div class="hero-img-box">
+            <img src="mom-photo.png" alt="Mom" onerror="this.src='https://via.placeholder.com/280x380?text=Mom'">
+        </div>
+        <div class="hero-text" style="text-align: center;">
+            <h1>Mom<span>Beautiful Birthday</span></h1>
+        </div>
+        <button class="btn" onclick="go(2)">THE SURPRISE →</button>
+    </div>
 
-<!-- PAGE 2 -->
-<div class="page page2 hidden" id="page2">
-  <h1>Click the Gift 🎁</h1>
-  <div class="gift-box" onclick="openGift(this)">
-    <div class="lid"></div>
-  </div>
-  <button onclick="nextPage(2)" id="nextBtn" style="display:none">Next ➡️</button>
-</div>
+    <div class="page" id="page2">
+        <canvas id="treeCanvas"></canvas>
+        <div class="tree-msg">
+            <h2>The World Got Luckier</h2>
+            <p style="letter-spacing: 5px; opacity: 0.6;">SINCE MAY 27</p>
+        </div>
+        <button class="btn" onclick="go(3)">OPEN MY HEART →</button>
+    </div>
 
-<!-- PAGE 3 -->
-<div class="page page3 hidden" id="page3">
-  <h1 id="finalMsg">You are my world Mom 💕<br>I love you forever 🌸</h1>
-</div>
+    <div class="page" id="page3">
+        <div class="env-wrapper">
+            <div class="env-flap"></div>
+            <div class="letter">
+                <h3>Dear Mom,</h3>
+                <p>Happy Birthday! ❤️</p>
+                <span style="font-size: 0.8rem; color: #999;">(Place your hand here)</span>
+            </div>
+            <div class="env-base"></div>
+        </div>
+        <p style="margin-top: 180px; color: #888; font-size: 0.7rem; letter-spacing: 3px;">HOVER THE ENVELOPE</p>
+    </div>
 
-<script>
-function nextPage(page) {
-  document.getElementById('page' + page).classList.add('hidden');
-  document.getElementById('page' + (page + 1)).classList.remove('hidden');
-}
+    <script>
+        function go(num) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + num).classList.add('active');
+            if(num === 2) initTree();
+        }
 
-function openGift(box) {
-  box.classList.add('open');
-  createHearts();
-  document.getElementById('nextBtn').style.display = 'inline-block';
-}
+        // Cinematic Heart Tree
+        function initTree() {
+            const canvas = document.getElementById('treeCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-function createHearts() {
-  for (let i = 0; i < 20; i++) {
-    let heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.innerHTML = '❤️';
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.fontSize = (15 + Math.random()*20) + 'px';
-    document.body.appendChild(heart);
+            const particles = [];
+            class Heart {
+                constructor() {
+                    this.reset();
+                    this.y = Math.random() * canvas.height; // Fill screen initially
+                }
+                reset() {
+                    this.x = canvas.width / 2;
+                    this.y = canvas.height * 0.8;
+                    this.size = Math.random() * 10 + 2;
+                    this.speedX = (Math.random() - 0.5) * 6;
+                    this.speedY = Math.random() * -3 - 1;
+                    this.alpha = 1;
+                }
+                draw() {
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = "#ff4d6d";
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.alpha -= 0.005;
+                    if(this.alpha <= 0) this.reset();
+                }
+            }
 
-    setTimeout(() => heart.remove(), 4000);
-  }
-}
-</script>
+            for(let i=0; i<150; i++) particles.push(new Heart());
 
+            function animate() {
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.15)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        gsap.from(".hero-img-box", { duration: 1.5, y: 50, opacity: 0, ease: "power4.out" });
+    </script>
 </body>
 </html>
