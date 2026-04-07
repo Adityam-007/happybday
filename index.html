@@ -12,6 +12,7 @@
             --accent: #ff4d6d; 
             --bg: #0d0d0d; 
             --gold: #d4af37; 
+            --wine: #4a0e0e;
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,7 +28,6 @@
 
         /* --- PAGE 1 --- */
         #page1 { background: radial-gradient(circle at 50% 30%, #2c0b0e 0%, #0d0d0d 100%); }
-        
         #bokeh-container { position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: 1; }
         .particle { position: absolute; background: rgba(255, 77, 109, 0.1); border-radius: 50%; pointer-events: none; }
 
@@ -66,40 +66,65 @@
         #treeCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .tree-msg { z-index: 10; }
 
-        /* --- PAGE 3 --- */
-        #page3 { background: #fff5f6; color: #1a1a1a; }
-        .envelope-container {
-            position: relative; width: 300px; height: 200px;
-            cursor: pointer; perspective: 1000px;
+        /* --- PAGE 3: UPGRADED ENVELOPE & PHOTOS --- */
+        #page3 { background: radial-gradient(circle, #fff5f6 0%, #ffe0e5 100%); color: #1a1a1a; overflow: hidden; }
+
+        .envelope-wrapper {
+            position: relative; width: 350px; height: 240px; /* Bigger envelope */
+            perspective: 1500px; z-index: 10; margin-top: 50px;
         }
-        .env-paper {
+
+        /* The two photos behind the envelope */
+        .photo-card {
+            position: absolute; width: 180px; height: 230px;
+            background: white; padding: 10px 10px 35px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 4px; z-index: 1;
+            opacity: 0; transform: translate(-50%, 0) rotate(0deg);
+            left: 50%; top: 10px;
+            transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .photo-card img { width: 100%; height: 100%; object-fit: cover; border: 1px solid #eee; }
+        .photo-card::after { 
+            content: 'Memory'; position: absolute; bottom: 8px; left: 0; width: 100%; 
+            text-align: center; font-family: 'Dancing Script'; color: #888; font-size: 1.1rem;
+        }
+
+        .env-back {
             position: absolute; width: 100%; height: 100%;
-            background: #d44d5c; border-radius: 0 0 10px 10px;
-            z-index: 2; box-shadow: 0 15px 35px rgba(212, 77, 92, 0.3);
+            background: var(--wine); border-radius: 0 0 15px 15px;
+            border: 2px solid var(--gold); z-index: 2;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
+
         .env-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
-            border-left: 150px solid transparent; border-right: 150px solid transparent;
-            border-top: 115px solid #b83b48;
-            transform-origin: top; transition: 0.6s ease-in-out; z-index: 5;
+            border-left: 175px solid transparent; border-right: 175px solid transparent;
+            border-top: 140px solid #631212;
+            transform-origin: top; transition: 0.8s ease-in-out; z-index: 8;
         }
-        .letter {
-            position: absolute; bottom: 5px; left: 10px;
-            width: 280px; height: 180px; background: white;
-            padding: 25px; border-radius: 5px; z-index: 3;
-            transition: transform 0.8s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        .letter h3 { font-family: 'Dancing Script'; font-size: 1.8rem; color: var(--accent); margin: 0; }
 
-        .envelope-container.open .env-flap { transform: rotateX(180deg); z-index: 1; }
-        .envelope-container.open .letter { transform: translateY(-140px); }
+        .letter {
+            position: absolute; bottom: 10px; left: 15px;
+            width: 320px; height: 210px; background: #fffdf5;
+            padding: 30px; border-radius: 5px; z-index: 5;
+            transition: transform 0.8s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .letter h3 { font-family: 'Dancing Script'; font-size: 2.2rem; color: var(--accent); margin: 0; }
+        .letter p { font-size: 1.1rem; line-height: 1.4; color: #444; }
+
+        /* Animation States */
+        .envelope-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope-wrapper.open .letter { transform: translateY(-180px) scale(1.05); }
+        .envelope-wrapper.open .p1 { opacity: 1; transform: translate(-190px, -120px) rotate(-15deg); }
+        .envelope-wrapper.open .p2 { opacity: 1; transform: translate(10px, -120px) rotate(15deg); }
 
         .btn {
             margin-top: 50px; padding: 16px 45px; background: var(--accent);
             border: none; color: white; border-radius: 50px;
             font-weight: 600; font-size: 0.8rem; letter-spacing: 2px;
-            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); cursor: pointer; z-index: 10;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); cursor: pointer; z-index: 15;
         }
     </style>
 </head>
@@ -108,7 +133,7 @@
     <div class="page active" id="page1">
         <div id="bokeh-container"></div>
         <div class="image-circle">
-            <img src="mom-photo.jpeg" alt="Mom" onerror="this.src='https://via.placeholder.com/300x300?text=Mom'">
+            <img src="mom-photo.png" alt="Mom" id="hero-img">
         </div>
         <div class="hero-text">
             <h2 id="greet">Dearest Mom</h2>
@@ -121,53 +146,73 @@
     <div class="page" id="page2">
         <canvas id="treeCanvas"></canvas>
         <div class="tree-msg">
-            <h2 style="font-family: 'Playfair Display';">The World Got Luckier</h2>
+            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">The World Got Luckier</h2>
             <p style="color: var(--accent); letter-spacing: 4px; font-weight: 600;">SINCE MAY 27</p>
             <button class="btn" onclick="go(3)" style="background: white; color: black;">OPEN MY HEART →</button>
         </div>
     </div>
 
     <div class="page" id="page3">
-        <div class="envelope-container" onclick="this.classList.toggle('open')">
+        <div class="envelope-wrapper" id="envWrap" onclick="this.classList.toggle('open')">
+            <div class="photo-card p1"><img id="photo1" src=""></div>
+            <div class="photo-card p2"><img id="photo2" src=""></div>
+
             <div class="env-flap"></div>
             <div class="letter">
                 <h3>Dear Mom,</h3>
                 <p>You make every day feel like a celebration. May your 34th year be as beautiful as you are! ❤️</p>
-                <small style="color: var(--accent); font-weight: bold;">I Love You Always!</small>
+                <small style="color: var(--accent); font-weight: bold; font-size: 1rem;">I Love You Always!</small>
             </div>
-            <div class="env-paper"></div>
+            <div class="env-back"></div>
         </div>
-        <button class="btn" onclick="go(1)" style="background: transparent; border: 1px solid #333; color: #333; margin-top: 180px;">REPLAY</button>
+        
+        <button class="btn" onclick="go(1)" style="background: transparent; border: 1px solid #333; color: #333; margin-top: 240px;">REPLAY</button>
     </div>
 
     <script>
-        // 1. RIBBON BURST LOGIC
+        // --- PHOTO SETUP ---
+        // Paste your Base64 strings (Data URI) here
+        const base64_hero = "PASTE_MOM_PHOTO_BASE64_HERE";
+        const base64_p1   = "PASTE_PHOTO_1_HERE";
+        const base64_p2   = "PASTE_PHOTO_2_HERE";
+
+        function fix(s) { 
+            if(!s || s.length < 20) return "https://via.placeholder.com/400x500?text=Photo";
+            if(s.includes('url(')) return s.split('url(')[1].split(')')[0].replace(/['"]/g, "");
+            return s; 
+        }
+
+        document.getElementById('hero-img').src = fix(base64_hero);
+        document.getElementById('photo1').src = fix(base64_p1);
+        document.getElementById('photo2').src = fix(base64_p2);
+
+
+        // --- CORE LOGIC ---
         function burst() {
             var count = 150;
             var defaults = { origin: { y: 0.8 }, colors: ['#ff4d6d', '#d4af37', '#ffffff'] };
-
             function fire(particleRatio, opts) {
                 confetti(Object.assign({}, defaults, opts, {
                     particleCount: Math.floor(count * particleRatio)
                 }));
             }
-
             fire(0.25, { spread: 30, startVelocity: 60 });
             fire(0.2, { spread: 60 });
             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
             fire(0.1, { spread: 130, startVelocity: 30, decay: 0.92, scalar: 1.2 });
         }
 
-        // 2. PAGE NAVIGATION
         function go(num) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page' + num).classList.add('active');
+            if(num === 1) {
+                document.getElementById('envWrap').classList.remove('open');
+                burst();
+            }
             if(num === 2) initTree();
         }
 
-        // 3. ENTRANCE ANIMATIONS (AUTO-BURST INCLUDED)
         window.onload = () => {
-            // Bokeh generation
             const container = document.getElementById('bokeh-container');
             for (let i = 0; i < 15; i++) {
                 const p = document.createElement('div');
@@ -181,27 +226,17 @@
                 gsap.to(p, { x: "random(-100, 100)", y: "random(-100, 100)", duration: "random(10, 20)", repeat: -1, yoyo: true, ease: "sine.inOut" });
             }
 
-            // The Timeline
             const tl = gsap.timeline();
             tl.from(".image-circle", { duration: 1.2, scale: 0, rotate: -180, opacity: 0, ease: "back.out(1.2)" })
               .from("#greet", { duration: 0.6, y: 20, opacity: 0 }, "-=0.4")
               .from("#main-title", { 
-                  duration: 0.8, 
-                  y: 30, 
-                  opacity: 0, 
-                  ease: "power4.out",
-                  onComplete: () => {
-                      // AUTO BURST TRIGGERS HERE!
-                      burst();
-                      // Small secondary burst for "extra" feeling
-                      setTimeout(burst, 400);
-                  }
+                  duration: 0.8, y: 30, opacity: 0, ease: "power4.out",
+                  onComplete: () => { burst(); setTimeout(burst, 400); }
               }, "-=0.3")
               .from("#sub-text", { duration: 0.6, opacity: 0 }, "-=0.2")
               .from("#start-btn", { duration: 0.8, scale: 0.8, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.1");
         };
 
-        // 4. TREE ANIMATION (PAGE 2)
         function initTree() {
             const canvas = document.getElementById('treeCanvas');
             const ctx = canvas.getContext('2d');
@@ -231,9 +266,9 @@
                     ctx.fill();
                 }
             }
-            for(let i=0; i<80; i++) hearts.push(new Heart());
+            if(hearts.length === 0) for(let i=0; i<80; i++) hearts.push(new Heart());
             function animate() {
-                ctx.fillStyle = 'rgba(13, 13, 13, 0.2)';
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 hearts.forEach(h => { h.update(); h.draw(); });
                 requestAnimationFrame(animate);
