@@ -1,210 +1,184 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>HBD Mom</title>	    
-    <link type="text/css" rel="stylesheet" href="./file/default.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    
-    <script type="text/javascript" src="./file/jquery.min.js"></script>
-    <script type="text/javascript" src="./file/jscex.min.js"></script>
-    <script type="text/javascript" src="./file/jscex-parser.js"></script>
-    <script type="text/javascript" src="./file/jscex-jit.js"></script>
-    <script type="text/javascript" src="./file/jscex-builderbase.min.js"></script>
-    <script type="text/javascript" src="./file/jscex-async.min.js"></script>
-    <script type="text/javascript" src="./file/jscex-async-powerpack.min.js"></script>
-    <script type="text/javascript" src="./file/functions.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./file/love.js" charset="utf-8"></script>
-    
-    <style>
-        /* VISUALLY APPEALING TEXT STYLING */
-        #code {
-            display: none;
-            font-family: 'Poppins', sans-serif;
-            color: #444;
-            line-height: 1.8;
-            padding-left: 20px;
-        }
-        
-        .say {
-            display: block;
-            opacity: 0;
-            transform: translateX(-20px);
-            transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* Making text significantly bigger */
-            font-size: 28px; 
-            margin-bottom: 10px;
-        }
+<meta charset="UTF-8">
+<title>Happy Birthday Mom ❤️</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
 
-        /* Special styling for the main birthday wish */
-        .highlight {
-            font-family: 'Dancing Script', cursive;
-            font-size: 45px;
-            background: linear-gradient(45deg, #ff4d6d, #f64c72);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
-        }
+  .page {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.8s ease, opacity 0.8s;
+  }
 
-        .say.reveal {
-            opacity: 1;
-            transform: translateX(0);
-        }
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+  }
 
-        #clock-box {
-            font-size: 20px;
-            color: #ff4d6d;
-            font-family: 'Poppins', sans-serif;
-            margin-top: 20px;
-        }
+  /* COLOR PALETTE */
+  .page1 { background: linear-gradient(135deg, #ff758c, #ffb199); }
+  .page2 { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+  .page3 { background: linear-gradient(135deg, #fddb92, #d1fdff); }
 
-        #clock {
-            font-weight: 600;
-            background: rgba(255, 77, 109, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-    </style>
+  h1 {
+    color: white;
+    font-size: 3em;
+    text-align: center;
 
-    <script>
-        function playAudio() {
-            var audio = document.getElementById("myAudio");
-            if(audio) audio.play();
-        }
-    </script>
+    /* ✅ ONLY ADDED ANIMATION */
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeSlide 1s ease forwards;
+  }
+
+  @keyframes fadeSlide {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 25px;
+    background: white;
+    color: #ff4d6d;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+  }
+
+  /* GIFT BOX */
+  .gift-box {
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(145deg, #ff4d6d, #ff758f);
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    animation: float 2s infinite ease-in-out;
+  }
+
+  .gift-box::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background: gold;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .gift-box::after {
+    content: '';
+    position: absolute;
+    height: 30px;
+    width: 100%;
+    background: gold;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lid {
+    position: absolute;
+    width: 240px;
+    height: 60px;
+    background: #ff758f;
+    top: -60px;
+    left: -10px;
+    border-radius: 10px;
+    transition: 0.6s;
+  }
+
+  .open .lid {
+    transform: rotate(-35deg) translateY(-20px);
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  /* HEARTS */
+  .heart {
+    position: absolute;
+    color: red;
+    font-size: 20px;
+    animation: floatUp 4s linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+  }
+
+</style>
 </head>
 <body>
-    <div id="main">
-        <div id="error">Please use <a href="http://www.google.cn/chrome/">Chrome</a> or <a href="http://firefox.com.cn/">Firefox</a></div>
-        <audio autoplay="autoplay" id="myAudio">
-            <source src="aud.mp3" type="audio/mp3" />
-        </audio>
-        <div id="wrap">
-            <div id="text">
-                <div id="code">
-                    <span class="say">To the 💞</span>
-                    <span class="say">Best Woman 🎈</span>
-                    <span class="say">and the Best mother 🍀</span>
-                    <span class="say highlight">Wishing you 34th</span>
-                    <span class="say highlight">Happy Birthday 💕</span>
-                    <span class="say" style="font-size: 22px; margin-top: 20px; font-style: italic; color: #777;">
-                        I am lucky to have parents like you
-                    </span>
-                </div>
-            </div>
-            <div id="clock-box">
-                <span id="clock"></span>
-            </div>
-            <canvas id="canvas" width="1100" height="680"></canvas>
-        </div>
-    </div>
 
-    <script>
-    (function() {
-        var canvas = $('#canvas');
-        if (!canvas[0].getContext) {
-            $("#error").show();
-            return false;
-        }
+<!-- PAGE 1 -->
+<div class="page page1" id="page1">
+  <h1>🎉 Happy Birthday Mom 🎂</h1>
+  <button onclick="nextPage(1)">Start Surprise 💖</button>
+</div>
 
-        var width = canvas.width();
-        var height = canvas.height();        
-        canvas.attr("width", width);
-        canvas.attr("height", height);
+<!-- PAGE 2 -->
+<div class="page page2 hidden" id="page2">
+  <h1>Click the Gift 🎁</h1>
+  <div class="gift-box" onclick="openGift(this)">
+    <div class="lid"></div>
+  </div>
+  <button onclick="nextPage(2)" id="nextBtn" style="display:none">Next ➡️</button>
+</div>
 
-        var opts = {
-            seed: { x: width / 2 - 20, color: "rgb(190, 26, 37)", scale: 2 },
-            branch: [
-                [535, 680, 570, 250, 500, 200, 30, 100, [
-                    [540, 500, 455, 417, 340, 400, 13, 100, [
-                        [450, 435, 434, 430, 394, 395, 2, 40]
-                    ]],
-                    [550, 445, 600, 356, 680, 345, 12, 100, [
-                        [578, 400, 648, 409, 661, 426, 3, 80]
-                    ]],
-                    [539, 281, 537, 248, 534, 217, 3, 40],
-                    [546, 397, 413, 247, 328, 244, 9, 80, [
-                        [427, 286, 383, 253, 371, 205, 2, 40],
-                        [498, 345, 435, 315, 395, 330, 4, 60]
-                    ]],
-                    [546, 357, 608, 252, 678, 221, 6, 100, [
-                        [590, 293, 646, 277, 648, 271, 2, 80]
-                    ]]
-                ]] 
-            ],
-            bloom: { num: 700, width: 1080, height: 650 },
-            footer: { width: 1200, height: 5, speed: 10 }
-        }
+<!-- PAGE 3 -->
+<div class="page page3 hidden" id="page3">
+  <h1 id="finalMsg">You are my world Mom 💕<br>I love you forever 🌸</h1>
+</div>
 
-        var tree = new Tree(canvas[0], width, height, opts);
-        var seed = tree.seed;
-        var foot = tree.footer;
-        var hold = 1;
+<script>
+function nextPage(page) {
+  document.getElementById('page' + page).classList.add('hidden');
+  document.getElementById('page' + (page + 1)).classList.remove('hidden');
+}
 
-        canvas.click(function(e) {
-            playAudio();
-            var offset = canvas.offset(), x, y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
-            if (seed.hover(x, y)) {
-                hold = 0; 
-                canvas.unbind("click");
-                canvas.unbind("mousemove");
-                canvas.removeClass('hand');
-            }
-        }).mousemove(function(e) {
-            var offset = canvas.offset(), x, y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
-            canvas.toggleClass('hand', seed.hover(x, y));
-        });
+function openGift(box) {
+  box.classList.add('open');
+  createHearts();
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
 
-        var seedAnimate = eval(Jscex.compile("async", function () {
-            seed.draw();
-            while (hold) { $await(Jscex.Async.sleep(10)); }
-            while (seed.canScale()) { seed.scale(0.95); $await(Jscex.Async.sleep(10)); }
-            while (seed.canMove()) { seed.move(0, 2); foot.draw(); $await(Jscex.Async.sleep(10)); }
-        }));
+function createHearts() {
+  for (let i = 0; i < 20; i++) {
+    let heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = (15 + Math.random()*20) + 'px';
+    document.body.appendChild(heart);
 
-        var growAnimate = eval(Jscex.compile("async", function () {
-            do { tree.grow(); $await(Jscex.Async.sleep(10)); } while (tree.canGrow());
-        }));
+    setTimeout(() => heart.remove(), 4000);
+  }
+}
+</script>
 
-        var flowAnimate = eval(Jscex.compile("async", function () {
-            do { tree.flower(2); $await(Jscex.Async.sleep(10)); } while (tree.canFlower());
-        }));
-
-        var moveAnimate = eval(Jscex.compile("async", function () {
-            tree.snapshot("p1", 240, 0, 610, 680);
-            while (tree.move("p1", 500, 0)) { foot.draw(); $await(Jscex.Async.sleep(10)); }
-            foot.draw();
-            tree.snapshot("p2", 500, 0, 610, 680);
-            canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
-            canvas.css("background", "#ffe");
-            $await(Jscex.Async.sleep(300));
-            canvas.css("background", "none");
-        }));
-
-        // Sequential Reveal Animation
-        var textAnimate = eval(Jscex.compile("async", function () {
-            $("#code").show();
-            var spans = $(".say");
-            for (var i = 0; i < spans.length; i++) {
-                $(spans[i]).addClass("reveal");
-                $await(Jscex.Async.sleep(1000)); // 1 second gap between lines
-            }
-        }));
-
-        var runAsync = eval(Jscex.compile("async", function () {
-            $await(seedAnimate());
-            $await(growAnimate());
-            $await(flowAnimate());
-            $await(moveAnimate());
-            textAnimate().start();
-        }));
-
-        runAsync().start();
-    })();
-    </script>
 </body>
 </html>
