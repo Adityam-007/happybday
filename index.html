@@ -25,7 +25,7 @@
         }
         .active { opacity: 1; visibility: visible; }
 
-        /* --- PAGE 1: HERO --- */
+        /* --- PAGE 1 --- */
         #page1 { background: radial-gradient(circle at 50% 30%, #2c0b0e 0%, #0d0d0d 100%); }
         
         #bokeh-container { position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: 1; }
@@ -61,12 +61,12 @@
         }
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* --- PAGE 2: HEART TREE --- */
+        /* --- PAGE 2 --- */
         #page2 { background: #050505; }
         #treeCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .tree-msg { z-index: 10; }
 
-        /* --- PAGE 3: ENVELOPE --- */
+        /* --- PAGE 3 --- */
         #page3 { background: #fff5f6; color: #1a1a1a; }
         .envelope-container {
             position: relative; width: 300px; height: 200px;
@@ -113,7 +113,7 @@
         <div class="hero-text">
             <h2 id="greet">Dearest Mom</h2>
             <h1 id="main-title">HAPPY <span class="shimmer" onclick="burst()">34th</span></h1>
-            <p style="letter-spacing: 4px; opacity: 0.6; margin-top: 10px;">BIRTHDAY CELEBRATION</p>
+            <p id="sub-text" style="letter-spacing: 4px; opacity: 0.6; margin-top: 10px;">BIRTHDAY CELEBRATION</p>
         </div>
         <button class="btn" id="start-btn" onclick="go(2)">THE SURPRISE →</button>
     </div>
@@ -141,10 +141,10 @@
     </div>
 
     <script>
-        // 1. RIBBON BURST FUNCTION
+        // 1. RIBBON BURST LOGIC
         function burst() {
-            var count = 200;
-            var defaults = { origin: { y: 0.7 }, colors: ['#ff4d6d', '#d4af37', '#ffffff'] };
+            var count = 150;
+            var defaults = { origin: { y: 0.8 }, colors: ['#ff4d6d', '#d4af37', '#ffffff'] };
 
             function fire(particleRatio, opts) {
                 confetti(Object.assign({}, defaults, opts, {
@@ -152,29 +152,27 @@
                 }));
             }
 
-            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.25, { spread: 30, startVelocity: 60 });
             fire(0.2, { spread: 60 });
             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45 });
+            fire(0.1, { spread: 130, startVelocity: 30, decay: 0.92, scalar: 1.2 });
         }
 
         // 2. PAGE NAVIGATION
         function go(num) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page' + num).classList.add('active');
-            if(num === 1) setTimeout(burst, 500); // Burst again on replay
             if(num === 2) initTree();
         }
 
-        // 3. ENTRANCE & BOKEH
+        // 3. ENTRANCE ANIMATIONS (AUTO-BURST INCLUDED)
         window.onload = () => {
-            // Create background bokeh
+            // Bokeh generation
             const container = document.getElementById('bokeh-container');
             for (let i = 0; i < 15; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
-                const size = Math.random() * 60 + 20;
+                const size = Math.random() * 50 + 20;
                 p.style.width = size + 'px';
                 p.style.height = size + 'px';
                 p.style.left = Math.random() * 100 + 'vw';
@@ -183,13 +181,24 @@
                 gsap.to(p, { x: "random(-100, 100)", y: "random(-100, 100)", duration: "random(10, 20)", repeat: -1, yoyo: true, ease: "sine.inOut" });
             }
 
-            // Animation Timeline
+            // The Timeline
             const tl = gsap.timeline();
             tl.from(".image-circle", { duration: 1.2, scale: 0, rotate: -180, opacity: 0, ease: "back.out(1.2)" })
               .from("#greet", { duration: 0.6, y: 20, opacity: 0 }, "-=0.4")
-              .from("#main-title", { duration: 0.8, y: 30, opacity: 0, ease: "power4.out" }, "-=0.3")
-              .add(() => burst()) // FIRE RIBBONS HERE
-              .from("#start-btn", { duration: 0.8, scale: 0.8, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.2");
+              .from("#main-title", { 
+                  duration: 0.8, 
+                  y: 30, 
+                  opacity: 0, 
+                  ease: "power4.out",
+                  onComplete: () => {
+                      // AUTO BURST TRIGGERS HERE!
+                      burst();
+                      // Small secondary burst for "extra" feeling
+                      setTimeout(burst, 400);
+                  }
+              }, "-=0.3")
+              .from("#sub-text", { duration: 0.6, opacity: 0 }, "-=0.2")
+              .from("#start-btn", { duration: 0.8, scale: 0.8, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.1");
         };
 
         // 4. TREE ANIMATION (PAGE 2)
