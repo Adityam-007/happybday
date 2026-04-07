@@ -4,273 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 34th Birthday Mom</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { 
-            --accent: #ff4d6d; 
-            --bg: #0d0d0d; 
-            --gold: #d4af37; 
-            --wine: #4a0e0e;
-        }
-        
+        :root { --accent: #ff4d6d; --bg: #0d0d0d; --gold: #d4af37; --wine: #4a0e0e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Poppins', sans-serif; color: white; }
 
-        .page {
-            position: absolute; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; visibility: hidden; transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 20px; text-align: center;
-        }
+        .page { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.5s; }
         .active { opacity: 1; visibility: visible; }
 
-        /* --- PAGE 1 --- */
+        /* Page 1 */
         #page1 { background: radial-gradient(circle at 50% 30%, #2c0b0e 0%, #0d0d0d 100%); }
-        #bokeh-container { position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: 1; }
-        .particle { position: absolute; background: rgba(255, 77, 109, 0.1); border-radius: 50%; pointer-events: none; }
+        .hero-circle { width: 220px; height: 220px; border-radius: 50%; padding: 5px; background: linear-gradient(45deg, var(--gold), var(--accent)); margin-bottom: 20px; }
+        .hero-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-        .image-circle {
-            position: relative;
-            width: 280px; height: 280px;
-            border-radius: 50%; padding: 8px;
-            background: linear-gradient(45deg, var(--gold), transparent, var(--accent));
-            box-shadow: 0 0 40px rgba(255, 77, 109, 0.3);
-            margin-bottom: 30px; z-index: 5;
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-        }
-        .image-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid #000; }
-
-        .hero-text { z-index: 5; }
-        .hero-text h2 { font-family: 'Dancing Script'; font-size: 1.8rem; color: var(--accent); margin: 0; }
-        .hero-text h1 { font-family: 'Playfair Display'; font-size: 4rem; margin: 0; line-height: 1; letter-spacing: -2px; }
+        /* Page 3: Mobile Responsive Envelope */
+        #page3 { background: #fff5f6; color: #1a1a1a; }
         
-        .shimmer {
-            background: linear-gradient(90deg, #d4af37, #fff, #d4af37);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
-            display: block; font-size: 3.5rem;
-            cursor: pointer;
-        }
-        @keyframes shine { to { background-position: 200% center; } }
-
-        /* --- PAGE 2 --- */
-        #page2 { background: #050505; }
-        #treeCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .tree-msg { z-index: 10; }
-
-        /* --- PAGE 3: BIG ENVELOPE & 400px PHOTOS --- */
-        #page3 { background: radial-gradient(circle, #fff5f6 0%, #ffe0e5 100%); color: #1a1a1a; overflow: hidden; }
-
-        .envelope-wrapper {
-            position: relative; width: 450px; height: 300px; 
-            perspective: 2000px; z-index: 10; margin-top: 50px;
+        .env-wrapper { 
+            position: relative; 
+            width: 90vw; max-width: 350px; /* Scaled for mobile */
+            height: 220px; 
+            perspective: 1200px; 
+            cursor: pointer; 
+            margin-top: 50px;
         }
 
-        /* 400x400 PHOTO CARDS */
-        .photo-card {
+        .photo { 
             position: absolute; 
-            width: 400px; height: 400px; 
-            background: white; padding: 15px 15px 50px 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            border-radius: 4px; z-index: 1;
-            opacity: 0; transform: translate(-50%, 50%) scale(0.5);
-            left: 50%; top: 0;
-            transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 85vw; height: 85vw; /* Square responsive size */
+            max-width: 380px; max-height: 380px; 
+            background: white; padding: 10px 10px 40px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            opacity: 0; left: 50%; top: 50%; 
+            transform: translate(-50%, -50%) scale(0.4); 
+            transition: 0.8s cubic-bezier(0.17, 0.88, 0.32, 1.2); 
+            z-index: 1; 
         }
-        .photo-card img { width: 100%; height: 100%; object-fit: cover; border: 1px solid #ddd; }
-        .photo-card::after { 
-            content: 'Best Memory'; position: absolute; bottom: 10px; left: 0; width: 100%; 
-            text-align: center; font-family: 'Dancing Script'; color: #555; font-size: 1.5rem;
-        }
+        .photo img { width: 100%; height: 100%; object-fit: cover; }
+        .photo::after { content: 'Best Memory'; position: absolute; bottom: 10px; left: 0; width: 100%; text-align: center; font-family: 'Dancing Script'; color: #777; font-size: 1.2rem; }
 
-        .env-back {
-            position: absolute; width: 100%; height: 100%;
-            background: var(--wine); border-radius: 0 0 15px 15px;
-            border: 3px solid var(--gold); z-index: 2;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-        }
+        .env-back { position: absolute; width: 100%; height: 100%; background: var(--wine); border-radius: 0 0 10px 10px; z-index: 10; border: 2px solid var(--gold); }
+        .env-flap { position: absolute; top: 0; width: 0; height: 0; border-left: 45vw solid transparent; border-right: 45vw solid transparent; border-top: 130px solid #631212; transform-origin: top; transition: 0.6s; z-index: 15; }
+        
+        /* Fixed Flap for desktop */
+        @media (min-width: 400px) { .env-flap { border-left: 175px solid transparent; border-right: 175px solid transparent; } }
 
-        .env-flap {
-            position: absolute; top: 0; left: 0; width: 0; height: 0;
-            border-left: 225px solid transparent; border-right: 225px solid transparent;
-            border-top: 180px solid #631212;
-            transform-origin: top; transition: 0.6s ease-in-out; z-index: 8;
-        }
+        .letter { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 190px; background: white; padding: 20px; z-index: 11; transition: 0.7s; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
 
-        .letter {
-            position: absolute; bottom: 15px; left: 25px;
-            width: 400px; height: 260px; background: #fffdf5;
-            padding: 40px; border-radius: 5px; z-index: 5;
-            transition: transform 0.8s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
-        }
-        .letter h3 { font-family: 'Dancing Script'; font-size: 2.2rem; color: var(--accent); margin: 0; }
-        .letter p { font-size: 1.1rem; line-height: 1.6; color: #333; }
+        /* THE FIX: Photos move based on screen percentage so they never leave the view */
+        .open .env-flap { transform: rotateX(180deg); z-index: 5; }
+        .open .letter { transform: translateY(-160px) scale(1.05); }
+        .open .p1 { opacity: 1; transform: translate(-105%, -110%) rotate(-8deg) scale(0.9); }
+        .open .p2 { opacity: 1; transform: translate(5%, -110%) rotate(8deg) scale(0.9); }
 
-        /* Animation States */
-        .envelope-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 1; }
-        .envelope-wrapper.open .letter { transform: translateY(-220px); }
-        .envelope-wrapper.open .p1 { opacity: 1; transform: translate(-450px, -200px) rotate(-15deg) scale(1); }
-        .envelope-wrapper.open .p2 { opacity: 1; transform: translate(50px, -200px) rotate(15deg) scale(1); }
-
-        .btn {
-            margin-top: 60px; padding: 18px 50px; background: var(--accent);
-            border: none; color: white; border-radius: 50px;
-            font-weight: 600; font-size: 0.9rem; letter-spacing: 2px;
-            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.3); cursor: pointer; z-index: 15;
-        }
+        .btn { padding: 15px 30px; background: var(--accent); border: none; color: white; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 40px; z-index: 20; }
+        .replay-btn { position: absolute; bottom: 30px; background: #333; }
     </style>
 </head>
 <body>
 
     <div class="page active" id="page1">
-        <div id="bokeh-container"></div>
-        <div class="image-circle">
-            <img id="hero-img" src="" alt="Mom">
-        </div>
-        <div class="hero-text">
-            <h2 id="greet">Dearest Mom</h2>
-            <h1 id="main-title">HAPPY <span class="shimmer" onclick="burst()">34th</span></h1>
-            <p id="sub-text" style="letter-spacing: 6px; opacity: 0.6; margin-top: 15px; font-weight: 600;">BIRTHDAY CELEBRATION</p>
-        </div>
-        <button class="btn" id="start-btn" onclick="go(2)">THE SURPRISE →</button>
+        <div class="hero-circle"><img id="hero-img" src=""></div>
+        <h1 style="font-family:'Playfair Display'; font-size: 3rem; margin:0;">HAPPY <span style="color:var(--gold)">34th</span></h1>
+        <button class="btn" onclick="go(2)">THE SURPRISE →</button>
     </div>
 
-    <div class="page" id="page2">
-        <canvas id="treeCanvas"></canvas>
-        <div class="tree-msg">
-            <h2 style="font-family: 'Playfair Display'; font-size: 3rem;">The World Got Luckier</h2>
-            <p style="color: var(--accent); letter-spacing: 4px; font-weight: 600; font-size: 1.2rem;">SINCE MAY 27</p>
-            <button class="btn" onclick="go(3)" style="background: white; color: black;">OPEN MY HEART →</button>
-        </div>
+    <div class="page" id="page2" style="background:#050505">
+        <h2 style="font-family:'Playfair Display'; font-size: 2rem; padding: 20px;">The World Got Luckier Since May 27</h2>
+        <button class="btn" onclick="go(3)">OPEN SURPRISE →</button>
     </div>
 
     <div class="page" id="page3">
-        <div class="envelope-wrapper" id="envWrap" onclick="this.classList.toggle('open')">
-            <div class="photo-card p1"><img id="photo1" src=""></div>
-            <div class="photo-card p2"><img id="photo2" src=""></div>
-
+        <div class="env-wrapper" id="env" onclick="this.classList.toggle('open')">
+            <div class="photo p1"><img id="img1" src=""></div>
+            <div class="photo p2"><img id="img2" src=""></div>
             <div class="env-flap"></div>
             <div class="letter">
-                <h3>Dear Mom,</h3>
-                <p>You make every single day feel like a celebration. May your 34th year be as bright and beautiful as your smile! ❤️</p>
-                <small style="color: var(--accent); font-weight: bold; font-size: 1.1rem; display: block; margin-top: 10px;">I Love You Always!</small>
+                <h3 style="font-family:'Dancing Script'; color:var(--accent); margin:0; font-size: 1.8rem;">Dear Mom,</h3>
+                <p style="font-size: 0.9rem; color: #444;">You make every single day feel like a celebration. Happy Birthday! ❤️</p>
             </div>
             <div class="env-back"></div>
         </div>
-        
-        <button class="btn" onclick="go(1)" style="background: transparent; border: 2px solid #333; color: #333; margin-top: 250px;">REPLAY JOURNEY</button>
+        <button class="btn replay-btn" onclick="go(1)">REPLAY STORY</button>
     </div>
 
     <script>
-        // --- PHOTO CONFIGURATION ---
-        // Paste your Base64 strings or URLs here!
-        const MOM_HERO = "mom-photo.jpeg"; 
-        const PHOTO_LEFT = "memory1.jpeg";
-        const PHOTO_RIGHT = "memory2.jpeg";
+        // --- 📸 PASTE YOUR CODES BELOW 📸 ---
+        const photo_hero = "PASTE_HERE"; 
+        const photo_1    = "PASTE_HERE";
+        const photo_2    = "PASTE_HERE";
+
+        function clean(str) {
+            if (!str || str.length < 20) return "https://via.placeholder.com/400";
+            if (str.includes('url("')) return str.split('url("')[1].split('")')[0];
+            if (str.includes('url(')) return str.split('url(')[1].split(')')[0];
+            return str.trim();
+        }
 
         window.onload = () => {
-            // Set photos
-            const setImg = (id, src) => {
-                const el = document.getElementById(id);
-                el.src = src;
-                el.onerror = () => el.src = `https://via.placeholder.com/400x400?text=Photo`;
-            };
-            setImg('hero-img', MOM_HERO);
-            setImg('photo1', PHOTO_LEFT);
-            setImg('photo2', PHOTO_RIGHT);
-
-            // Bokeh generation
-            const container = document.getElementById('bokeh-container');
-            for (let i = 0; i < 20; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const size = Math.random() * 60 + 20;
-                p.style.width = size + 'px';
-                p.style.height = size + 'px';
-                p.style.left = Math.random() * 100 + 'vw';
-                p.style.top = Math.random() * 100 + 'vh';
-                container.appendChild(p);
-                gsap.to(p, { x: "random(-150, 150)", y: "random(-150, 150)", duration: "random(10, 25)", repeat: -1, yoyo: true, ease: "sine.inOut" });
-            }
-
-            const tl = gsap.timeline();
-            tl.from(".image-circle", { duration: 1.2, scale: 0, rotate: -180, opacity: 0, ease: "back.out(1.2)" })
-              .from("#greet", { duration: 0.6, y: 20, opacity: 0 }, "-=0.4")
-              .from("#main-title", { 
-                  duration: 0.8, y: 30, opacity: 0, ease: "power4.out",
-                  onComplete: () => { burst(); setTimeout(burst, 400); }
-              }, "-=0.3")
-              .from("#sub-text", { duration: 0.6, opacity: 0 }, "-=0.2")
-              .from("#start-btn", { duration: 0.8, scale: 0.8, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.1");
+            document.getElementById('hero-img').src = clean(photo_hero);
+            document.getElementById('img1').src = clean(photo_1);
+            document.getElementById('img2').src = clean(photo_2);
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.7 } });
         };
 
-        function burst() {
-            var count = 200;
-            var defaults = { origin: { y: 0.7 }, colors: ['#ff4d6d', '#d4af37', '#ffffff'] };
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
-            }
-            fire(0.25, { spread: 40, startVelocity: 70 });
-            fire(0.2, { spread: 70 });
-            fire(0.35, { spread: 120, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 150, startVelocity: 40, decay: 0.92, scalar: 1.2 });
-        }
-
-        function go(num) {
+        function go(n) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page' + num).classList.add('active');
-            if(num === 1) document.getElementById('envWrap').classList.remove('open');
-            if(num === 2) initTree();
-        }
-
-        function initTree() {
-            const canvas = document.getElementById('treeCanvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const hearts = [];
-            class Heart {
-                constructor() { this.reset(); this.y = Math.random() * canvas.height; }
-                reset() {
-                    this.x = canvas.width / 2;
-                    this.y = canvas.height * 0.85;
-                    this.size = Math.random() * 7 + 2;
-                    this.vx = (Math.random() - 0.5) * 6;
-                    this.vy = Math.random() * -4 - 1;
-                    this.alpha = 1;
-                }
-                update() {
-                    this.x += this.vx; this.y += this.vy;
-                    this.alpha -= 0.007;
-                    if(this.alpha <= 0) this.reset();
-                }
-                draw() {
-                    ctx.globalAlpha = this.alpha;
-                    ctx.fillStyle = "#ff4d6d";
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+            document.getElementById('page'+n).classList.add('active');
+            if(n===1) {
+                document.getElementById('env').classList.remove('open');
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.7 } });
             }
-            if(hearts.length === 0) for(let i=0; i<100; i++) hearts.push(new Heart());
-            function animate() {
-                ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                hearts.forEach(h => { h.update(); h.draw(); });
-                requestAnimationFrame(animate);
-            }
-            animate();
         }
     </script>
 </body>
