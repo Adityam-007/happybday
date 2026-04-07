@@ -10,95 +10,101 @@
     <style>
         :root { --accent: #ff4d6d; --bg: #0d0d0d; --gold: #d4af37; --wine: #4a0e0e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Poppins', sans-serif; color: white; }
+        body, html { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; background: var(--bg); font-family: 'Poppins', sans-serif; color: white; }
 
         .page { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.5s; }
         .active { opacity: 1; visibility: visible; }
 
-        /* Page 1 */
+        /* Page 1 - Hero */
         #page1 { background: radial-gradient(circle at 50% 30%, #2c0b0e 0%, #0d0d0d 100%); }
-        .hero-circle { width: 220px; height: 220px; border-radius: 50%; padding: 5px; background: linear-gradient(45deg, var(--gold), var(--accent)); margin-bottom: 20px; }
-        .hero-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .hero-circle { width: 65vw; height: 65vw; max-width: 250px; max-height: 250px; border-radius: 50%; padding: 6px; background: linear-gradient(45deg, var(--gold), var(--accent)); margin-bottom: 20px; box-shadow: 0 10px 40px rgba(255, 77, 109, 0.4); }
+        .hero-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid #000; }
 
-        /* Page 3: Mobile Responsive Envelope */
-        #page3 { background: #fff5f6; color: #1a1a1a; }
+        /* Page 3 - The Envelope & Mobile Stack */
+        #page3 { background: #fff5f6; color: #1a1a1a; justify-content: flex-end; padding-bottom: 80px; }
         
         .env-wrapper { 
             position: relative; 
-            width: 90vw; max-width: 350px; /* Scaled for mobile */
-            height: 220px; 
-            perspective: 1200px; 
-            cursor: pointer; 
-            margin-top: 50px;
+            width: 85vw; max-width: 320px; 
+            height: 200px; 
+            perspective: 1000px; 
+            cursor: pointer;
         }
 
         .photo { 
             position: absolute; 
-            width: 85vw; height: 85vw; /* Square responsive size */
-            max-width: 380px; max-height: 380px; 
-            background: white; padding: 10px 10px 40px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            width: 80vw; height: 80vw; /* Responsive square */
+            max-width: 340px; max-height: 340px; 
+            background: white; padding: 10px 10px 35px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2); 
             opacity: 0; left: 50%; top: 50%; 
-            transform: translate(-50%, -50%) scale(0.4); 
+            transform: translate(-50%, -50%) scale(0.2); 
             transition: 0.8s cubic-bezier(0.17, 0.88, 0.32, 1.2); 
             z-index: 1; 
         }
         .photo img { width: 100%; height: 100%; object-fit: cover; }
-        .photo::after { content: 'Best Memory'; position: absolute; bottom: 10px; left: 0; width: 100%; text-align: center; font-family: 'Dancing Script'; color: #777; font-size: 1.2rem; }
+        .photo::after { content: 'Best Memory ❤️'; position: absolute; bottom: 8px; left: 0; width: 100%; text-align: center; font-family: 'Dancing Script'; color: #888; font-size: 1.1rem; }
 
-        .env-back { position: absolute; width: 100%; height: 100%; background: var(--wine); border-radius: 0 0 10px 10px; z-index: 10; border: 2px solid var(--gold); }
-        .env-flap { position: absolute; top: 0; width: 0; height: 0; border-left: 45vw solid transparent; border-right: 45vw solid transparent; border-top: 130px solid #631212; transform-origin: top; transition: 0.6s; z-index: 15; }
+        .env-back { position: absolute; width: 100%; height: 100%; background: var(--wine); border-radius: 0 0 10px 10px; z-index: 10; border: 2px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .env-flap { position: absolute; top: 0; width: 0; height: 0; border-left: 42.5vw solid transparent; border-right: 42.5vw solid transparent; border-top: 110px solid #631212; transform-origin: top; transition: 0.6s; z-index: 15; }
         
-        /* Fixed Flap for desktop */
-        @media (min-width: 400px) { .env-flap { border-left: 175px solid transparent; border-right: 175px solid transparent; } }
+        @media (min-width: 380px) { .env-flap { border-left: 160px solid transparent; border-right: 160px solid transparent; } }
 
-        .letter { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 190px; background: white; padding: 20px; z-index: 11; transition: 0.7s; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        .letter { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 170px; background: white; padding: 20px; z-index: 11; transition: 0.6s; border-radius: 4px; box-shadow: 0 0 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: center; }
 
-        /* THE FIX: Photos move based on screen percentage so they never leave the view */
-        .open .env-flap { transform: rotateX(180deg); z-index: 5; }
-        .open .letter { transform: translateY(-160px) scale(1.05); }
-        .open .p1 { opacity: 1; transform: translate(-105%, -110%) rotate(-8deg) scale(0.9); }
-        .open .p2 { opacity: 1; transform: translate(5%, -110%) rotate(8deg) scale(0.9); }
+        /* THE MOBILE ANIMATION: Stacked and fanned so they stay in view */
+        .open .env-flap { transform: rotateX(180deg); z-index: 2; }
+        .open .letter { transform: translateY(-130px); }
+        
+        /* Photo 1: Tilts left and stays high */
+        .open .p1 { opacity: 1; transform: translate(-55%, -135%) rotate(-8deg) scale(0.95); z-index: 5; }
+        /* Photo 2: Tilts right and stays slightly lower */
+        .open .p2 { opacity: 1; transform: translate(-45%, -115%) rotate(6deg) scale(0.95); z-index: 6; }
 
-        .btn { padding: 15px 30px; background: var(--accent); border: none; color: white; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 40px; z-index: 20; }
-        .replay-btn { position: absolute; bottom: 30px; background: #333; }
+        .btn { padding: 14px 30px; background: var(--accent); border: none; color: white; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 30px; z-index: 50; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); }
+        .replay-btn { position: absolute; bottom: 20px; background: #333; font-size: 0.7rem; padding: 8px 20px; }
     </style>
 </head>
 <body>
 
     <div class="page active" id="page1">
         <div class="hero-circle"><img id="hero-img" src=""></div>
-        <h1 style="font-family:'Playfair Display'; font-size: 3rem; margin:0;">HAPPY <span style="color:var(--gold)">34th</span></h1>
+        <h2 style="font-family:'Dancing Script'; color:var(--accent); margin:0; font-size: 1.8rem;">Dearest Mom</h2>
+        <h1 style="font-family:'Playfair Display'; font-size: 3.2rem; margin:0; line-height:1;">HAPPY <br><span style="color:var(--gold); font-size: 4.5rem;">34th</span></h1>
         <button class="btn" onclick="go(2)">THE SURPRISE →</button>
     </div>
 
-    <div class="page" id="page2" style="background:#050505">
-        <h2 style="font-family:'Playfair Display'; font-size: 2rem; padding: 20px;">The World Got Luckier Since May 27</h2>
-        <button class="btn" onclick="go(3)">OPEN SURPRISE →</button>
+    <div class="page" id="page2" style="background:#000">
+        <h2 style="font-family:'Playfair Display'; font-size: 2rem; padding: 30px; line-height: 1.4;">The World Got A Little Brighter Since May 27</h2>
+        <button class="btn" onclick="go(3)">OPEN MY HEART →</button>
     </div>
 
     <div class="page" id="page3">
         <div class="env-wrapper" id="env" onclick="this.classList.toggle('open')">
             <div class="photo p1"><img id="img1" src=""></div>
             <div class="photo p2"><img id="img2" src=""></div>
+            
             <div class="env-flap"></div>
             <div class="letter">
                 <h3 style="font-family:'Dancing Script'; color:var(--accent); margin:0; font-size: 1.8rem;">Dear Mom,</h3>
-                <p style="font-size: 0.9rem; color: #444;">You make every single day feel like a celebration. Happy Birthday! ❤️</p>
+                <p style="font-size: 0.85rem; color: #444; margin: 5px 0;">You make every single day feel like a celebration. May your 34th year be as beautiful as you are! ❤️</p>
+                <small style="font-weight:bold; color:var(--accent)">I Love You Always!</small>
             </div>
             <div class="env-back"></div>
         </div>
-        <button class="btn replay-btn" onclick="go(1)">REPLAY STORY</button>
+        <p style="font-size: 0.8rem; color: #888; margin-top: 20px;">(Tap the envelope to open)</p>
+        <button class="btn replay-btn" onclick="go(1)">REPLAY</button>
     </div>
 
     <script>
-        // --- 📸 PASTE YOUR CODES BELOW 📸 ---
+        // --- 📸 PASTE YOUR CODES HERE 📸 ---
         const photo_hero = "PASTE_HERE"; 
         const photo_1    = "PASTE_HERE";
         const photo_2    = "PASTE_HERE";
 
         function clean(str) {
             if (!str || str.length < 20) return "https://via.placeholder.com/400";
+            // Cleans "url()" or CSS tags if accidentally included
             if (str.includes('url("')) return str.split('url("')[1].split('")')[0];
             if (str.includes('url(')) return str.split('url(')[1].split(')')[0];
             return str.trim();
